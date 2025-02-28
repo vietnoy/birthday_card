@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, My Love! ❤️</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 50px;
+            color: white;
+            text-shadow: 2px 2px 10px black;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .gallery img {
+            width: 200px;
+            margin: 10px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+        .gallery img:hover {
+            transform: scale(1.1);
+        }
+        form {
+            margin-top: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            display: block;
+            display: flex;
+            width: 20%;
+            height: 150px;
+            margin: auto;
+            align-items: center;
+            flex-direction: column;
+        }
+        button {
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background: #ff79a2;
+        }
+        select {
+            border-radius: 5px;
+            margin-top: 10px;
+            font: inherit;
+        }
+        label {
+            font: inherit;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .birthday-card {
+            margin-top: 50px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            text-align: left;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+        .show-card {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .typewriter-text {
+            font-size: 18px;
+            color: black;
+            white-space: normal;
+            overflow: hidden;
+            display: inline-block;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎉 Happy Birthday, My Love! 🎂</h1>
+    <p>You're the most wonderful person in my life, and I can't wait to celebrate this special day with you! 💖</p>
+
+    <audio controls class="mt-4">
+        <source src="../static/Photograph.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="container">
+        <h2>🎬 Choose a Time for Our Movie Date on Tuesday</h2>
+        <form id="movieForm">
+            <label for="time">Pick a Time:</label>
+            <select id="time" name="time">
+                <option value="9:00 PM">9:00 PM</option>
+                <option value="10:00 PM">10:00 PM</option>
+                <option value="11:00 PM">11:00 PM</option>
+            </select>
+            <input type="hidden" id="email" value="nganhanguyen204@gmail.com">
+            <br><br>
+            <button type="submit">Confirm & Send Invite</button>
+        </form>
+    </div>
+
+    <div class="gallery">
+        <h2>📸 Our Beautiful Memories</h2>
+        <img src="../static/photo1.jpg" alt="Memory 1">
+        <img src="../static/photo2.jpg" alt="Memory 2">
+        <img src="../static/photo3.jpg" alt="Memory 3">
+        <img src="../static/photo4.jpg" alt="Memory 4">
+        <img src="../static/photo5.jpg" alt="Memory 5">
+        <img src="../static/photo6.jpg" alt="Memory 6">
+    </div>
+
+    <div class="birthday-card" id="birthdayCard">
+        <h2 class="text-3xl font-bold text-pink-600">A Special Message Just for You 🎁</h2>
+        <p class="typewriter-text" id="message"></p>
+    </div>
+
+    <script>
+        document.getElementById("movieForm").onsubmit = async function(e) {
+            e.preventDefault();
+            const time = document.getElementById("time").value;
+            const email = document.getElementById("email").value;
+
+            const response = await fetch("/send-invite", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ time, email })
+            });
+
+            if (response.ok) {
+                alert("🎉 Invitation Sent! Can't wait to see you! ❤️");
+            } else {
+                alert("Oops! Something went wrong.");
+            }
+        };
+
+        window.addEventListener('scroll', function() {
+            const card = document.getElementById('birthdayCard');
+            const messageElement = document.getElementById("message");
+            const messageText = "Happy Birthday, my love! 🎂💖 You are more than just my girlfriend—you are my greatest support, my calm in the storm, and the reason I’ve grown so much. Looking back, I know for sure that without you, I wouldn’t be where I am today. You believed in me even when I doubted myself, and that’s something I’ll never take for granted. You’ve changed my life in ways I never expected, and I can’t thank you enough for being here, for being you.";
+
+            const rect = card.getBoundingClientRect();
+            
+            if (rect.top < window.innerHeight && messageElement.innerHTML === "") {
+                card.classList.add('show-card');
+                let index = 0;
+                function typeWriter() {
+                    if (index < messageText.length) {
+                        messageElement.innerHTML = messageText.substring(0, index) + "|";
+                        index++;
+                        setTimeout(typeWriter, 100);
+                    } else {
+                        setInterval(() => {
+                            messageElement.innerHTML = messageElement.innerHTML.endsWith("|") ? messageText : messageText + "|";
+                        }, 500);
+                    }
+                }
+                typeWriter();
+            }
+        });
+    </script>
+
+</body>
+</html>
